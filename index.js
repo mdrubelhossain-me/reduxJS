@@ -10,6 +10,7 @@ const initialState = {
 };
 
 const INCREMENT = "INCREMENT";
+const INCREMENT_BY_VALUE = "INCREMENT_BY_VALUE";
 const DECREMENT = "DECREMENT";
 const RESET = "RESET";
 
@@ -17,6 +18,13 @@ const RESET = "RESET";
 const incrementAction = () => {
   return {
     type: INCREMENT,
+  };
+};
+//increment by value action
+const incrementByValueAction = (value) => {
+  return {
+    type: INCREMENT_BY_VALUE,
+    payload: value,
   };
 };
 
@@ -44,6 +52,8 @@ const counterReducer = (state = initialState, action) => {
       return { ...state, count: state.count - 1 };
     case RESET:
       return { ...state, count: 0 };
+    case INCREMENT_BY_VALUE:
+      return { ...state, count: state.count + action.payload };
     default:
       return state;
   }
@@ -57,5 +67,7 @@ store.subscribe(() => {
   console.log("State changed:", store.getState());
 });
 //dispatch actions
-store.dispatch(incrementAction()); // count: 1
-store.dispatch(incrementAction()); // count: 2
+// store.dispatch(incrementAction()); // count: 1
+// store.dispatch(incrementAction()); // count: 2
+// store.dispatch(decrementAction()); // count: 1
+store.dispatch(incrementByValueAction(5)); // count: 6
