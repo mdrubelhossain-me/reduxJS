@@ -22,6 +22,7 @@ const initialState = {
         return {
           ...state,
           users: [...state.users, action.payload],
+            count: state.count + 1,
         };
       default:
         return state;
