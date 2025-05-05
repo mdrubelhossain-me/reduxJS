@@ -39,5 +39,6 @@ const initialState = {
   });
   
   // Dispatch action
-  store.dispatch(addUser("John")); // State updated: { users: [ 'Doe', 'John' ], count: 1 }
+  store.dispatch(addUser("John")); 
+  store.dispatch(addUser("Abul")); 
   
