@@ -1,27 +1,79 @@
-//async action- api call
-//api url: https://jsonplaceholder.typicode.com/todos
-//redux-thunk is a middleware that allows you to write action creators that return a function instead of an action.
-//axios is a promise-based HTTP client for the browser and Node.js.
+const axios = require('axios');
 
+// imports
+const { createStore, applyMiddleware } = require('redux');
+const thunk = require('redux-thunk').defalult;
 
-//constants
+// Action Types
+const FETCH_TODOS_REQUEST = 'FETCH_TODOS_REQUEST';
+const FETCH_TODOS_SUCCESS = 'FETCH_TODOS_SUCCESS';
+const FETCH_TODOS_FAILURE = 'FETCH_TODOS_FAILURE';
 
+// Action Creators
+const fetchTodosRequest = () => ({
+    type: FETCH_TODOS_REQUEST,
+});
 
+const fetchTodosSuccess = (todos) => ({
+    type: FETCH_TODOS_SUCCESS,
+    payload: todos,
+});
 
-//state
-const initialState = {
-  todos: [],
-  loading: false,
-  error: null,
+const fetchTodosFailure = (error) => ({
+    type: FETCH_TODOS_FAILURE,
+    payload: error,
+});
+
+// Async Action Creator
+const fetchTodos = () => {
+    return async (dispatch) => {
+        dispatch(fetchTodosRequest());
+        try {
+            const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
+            dispatch(fetchTodosSuccess(response.data));
+        } catch (error) {
+            dispatch(fetchTodosFailure(error.message));
+        }
+    };
 };
 
+// Initial State
+const initialState = {
+    loading: false,
+    todos: [],
+    error: '',
+};
 
-//action
+// Reducer
+const todosReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case FETCH_TODOS_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case FETCH_TODOS_SUCCESS:
+            return {
+                loading: false,
+                todos: action.payload,
+                error: '',
+            };
+        case FETCH_TODOS_FAILURE:
+            return {
+                loading: false,
+                todos: [],
+                error: action.payload,
+            };
+        default:
+            return state;
+    }
+};
 
+// Create Redux store
+const store = createStore(todosReducer, applyMiddleware(thunk));
 
+// Subscribe to store updates
+store.subscribe(() => console.log(store.getState()));
 
-//reducer
-
-
-
-//store
+// Dispatch the async action
+store.dispatch(fetchTodos());
