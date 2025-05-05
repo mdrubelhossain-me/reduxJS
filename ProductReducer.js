@@ -2,8 +2,8 @@
 
 // Initial State
 const initialProductState = {
-    products: ["potato", "tomato", "onion"],
-    count: 3,
+  products: ["potato", "tomato", "onion"],
+  count: 3,
 };
 
 // Action Types
@@ -13,51 +13,56 @@ const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 
 // Action Creators
 const addProduct = (product) => ({
-    type: ADD_PRODUCT,
-    payload: product,
+  type: ADD_PRODUCT,
+  payload: product,
 });
 
 const removeProduct = (product) => ({
-    type: REMOVE_PRODUCT,
-    payload: product,
+  type: REMOVE_PRODUCT,
+  payload: product,
 });
 
 const updateProduct = (product) => ({
-    type: UPDATE_PRODUCT,
-    payload: product, // { oldProduct, newProduct }
+  type: UPDATE_PRODUCT,
+  payload: product, // { oldProduct, newProduct }
 });
 
 // Reducer
 const productReducer = (state = initialProductState, action) => {
-    switch (action.type) {
-        case ADD_PRODUCT:
-            return {
-                ...state,
-                products: [...state.products, action.payload],
-                count: state.count + 1,
-            };
-        case REMOVE_PRODUCT:
-            return {
-                ...state,
-                products: state.products.filter((product) => product !== action.payload),
-                count: state.count - 1,
-            };
-        case UPDATE_PRODUCT:
-            return {
-                ...state,
-                products: state.products.map((product) =>
-                    product === action.payload.oldProduct ? action.payload.newProduct : product
-                ),
-            };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case ADD_PRODUCT:
+      return {
+        ...state,
+        products: [...state.products, action.payload],
+        count: state.count + 1,
+      };
+    case REMOVE_PRODUCT:
+      return {
+        ...state,
+        products: state.products.filter(
+          (product) => product !== action.payload
+        ),
+        count: state.count - 1,
+      };
+    case UPDATE_PRODUCT:
+      return {
+        ...state,
+        products: state.products.map((product) =>
+          product === action.payload.oldProduct
+            ? action.payload.newProduct
+            : product
+        ),
+      };
+    default:
+      return state;
+  }
 };
 
 // Selectors
 const getAllProducts = (state) => state.products;
 const getProductCount = (state) => state.count;
-const getProduct = (state, name) => state.products.find((product) => product === name);
+const getProduct = (state, name) =>
+  state.products.find((product) => product === name);
 
 // Create Store
 const { createStore } = require("redux");
@@ -65,7 +70,7 @@ const store = createStore(productReducer);
 
 // Subscribe to store
 store.subscribe(() => {
-    console.log("State updated:", store.getState());
+  console.log("State updated:", store.getState());
 });
 
 // Dispatch Actions
